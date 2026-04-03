@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 
 const fpmOptions = [
   "--after-install=build/deb-postinstall"
@@ -17,7 +18,27 @@ const certSubject = 'SERIALNUMBER=803010247, C=US, ST=Texas, L=Dallas, O="Rathbo
 const bksAiShellPath = path.dirname(require.resolve('@beekeeperstudio/bks-ai-shell/package.json'));
 const bksErDiagramPath = path.dirname(require.resolve('@beekeeperstudio/bks-er-diagram/package.json'));
 
+/**
+ * Auto-generates NSIS protocol handler registration script before build
+ * 
+ * Ensures Windows installer has up-to-date database URL scheme handlers
+ * by reading from the 'protocols' array defined below.
+ * 
+ * Generated file: apps/studio/build/win/protocol-handler.nsi
+ */
+const generateNsisProtocols = () => {
+  try {
+    const generateScript = path.join(__dirname, 'build/win/generate-nsis-protocols.js')
+    if (fs.existsSync(generateScript)) {
+      require(generateScript)
+    }
+  } catch (e) {
+    console.warn('⚠️ Failed to generate NSIS protocols:', e.message)
+  }
+}
 
+// Run generator before exporting config
+generateNsisProtocols()
 
 module.exports = {
   appId: "io.beekeeperstudio.desktop",
@@ -235,7 +256,7 @@ module.exports = {
   },
   nsis: {
     oneClick: false,
-    include: './build/win/msvc-redist.nsh'
+    include: ['./build/win/msvc-redist.nsh', './build/win/protocol-handler.nsi']
   },
   appx: {
     applicationId: "beekeeperstudio",
