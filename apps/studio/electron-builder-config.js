@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 
 const fpmOptions = [
   "--after-install=build/deb-postinstall"
@@ -16,8 +17,6 @@ const rpmFpmOptions = [
 const certSubject = 'SERIALNUMBER=803010247, C=US, ST=Texas, L=Dallas, O="Rathbone Labs, LLC", CN="Rathbone Labs, LLC"'
 const bksAiShellPath = path.dirname(require.resolve('@beekeeperstudio/bks-ai-shell/package.json'));
 const bksErDiagramPath = path.dirname(require.resolve('@beekeeperstudio/bks-er-diagram/package.json'));
-
-
 
 module.exports = {
   appId: "io.beekeeperstudio.desktop",
@@ -235,7 +234,7 @@ module.exports = {
   },
   nsis: {
     oneClick: false,
-    include: './build/win/msvc-redist.nsh'
+    include: "./build/win/msvc-redist.nsh"
   },
   appx: {
     applicationId: "beekeeperstudio",
