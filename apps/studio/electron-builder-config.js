@@ -35,6 +35,7 @@ module.exports = {
     '!**/node_gyp_bins/*'
   ],
   afterPack: "./build/afterPack.js",
+  beforePack: "./build/win/generate-nsis-protocols.js",
   asarUnpack: [
     'package.json'
   ],
